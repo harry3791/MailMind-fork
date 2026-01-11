@@ -1,9 +1,9 @@
 import express, { type Request, Response, NextFunction } from "express";
-import { registerRoutes } from "./routes";
-import { serveStatic } from "./static";
+import { registerRoutes } from "./routes.ts";
+import { serveStatic } from "./static.ts";
 import { createServer } from "http";
-import { setStorage } from "./storage";
-import { LocalSQLiteStorage } from "./local-storage";
+import { setStorage } from "./storage.ts";
+import { LocalSQLiteStorage } from "./local-storage.ts";
 
 // 프로세스 레벨 에러 핸들링 - 서버 크래시 방지
 process.on('uncaughtException', (error) => {

@@ -1,0 +1,272 @@
+[
+  {
+    "message_id": "MSG-20260110-001",
+    "in_reply_to": null,
+    "sender": "pm_lee@shipyard.co.kr",
+    "receiver": "design_team@shipyard.co.kr",
+    "subject": "3도크 B-21 블록 설계 수정 요청",
+    "body": "안녕하세요.\n3도크 B-21 블록 시공 중 배관 간섭 문제가 발생했습니다.\n현장 사진과 수정 요청 도면을 첨부하오니 검토 부탁드립니다.\n기존 도면으로는 시공이 어려운 상황입니다.\n1월 12일까지 의견 회신 부탁드립니다.\n추가 자료 필요시 연락 바랍니다.",
+    "date": "2026-01-01 09:10"
+  },
+  {
+    "message_id": "MSG-20260110-002",
+    "in_reply_to": "MSG-20260110-001",
+    "sender": "design_lead@shipyard.co.kr",
+    "receiver": "pm_lee@shipyard.co.kr",
+    "subject": "B-21 블록 설계 변경 검토 요청",
+    "body": "첨부 도면 기준으로 구조 및 배관 간섭 검토를 진행 중입니다.\n보강재 위치 일부 조정이 필요할 것으로 판단됩니다.\n금일 중 1차 검토 결과를 공유드리겠습니다.\n추가 자료 있으시면 전달 부탁드립니다.\n검토 완료 후 회신드리겠습니다.",
+    "date": "2026-01-02 10:05"
+  },
+  {
+    "message_id": "MSG-20260110-003",
+    "in_reply_to": null,
+    "sender": "planning@shipyard.co.kr",
+    "receiver": "all_staff@shipyard.co.kr",
+    "subject": "2월 정기 안전 점검 일정 안내",
+    "body": "전사 공지드립니다.\n2월 정기 안전 점검이 아래 일정으로 진행될 예정입니다.\n점검 기간은 2월 10일부터 2월 12일까지입니다.\n점검 중 일부 작업 구역 출입이 제한될 수 있습니다.\n자세한 내용은 첨부 공지문을 참고해 주시기 바랍니다.\n안전 수칙 준수 부탁드립니다.",
+    "date": "2026-01-03 16:40"
+  },
+  {
+    "message_id": "MSG-20260110-004",
+    "in_reply_to": null,
+    "sender": "pm_park@shipyard.co.kr",
+    "receiver": "eng_team@shipyard.co.kr",
+    "subject": "LNGC 3호선 공정 지연 관련 회의 요청",
+    "body": "안녕하세요.\nLNGC 3호선 일부 공정에서 일정 지연이 발생하고 있습니다.\n원인 분석 및 대응 방안 논의를 위해 회의를 요청드립니다.\n회의는 1월 13일 오후 2시에 진행 예정입니다.\n회의 자료는 사전에 공유 부탁드립니다.\n참석자 명단도 회신 바랍니다.",
+    "date": "2026-01-04 11:20"
+  },
+  {
+    "message_id": "MSG-20260110-005",
+    "in_reply_to": null,
+    "sender": "procurement@shipyard.co.kr",
+    "receiver": "finance@shipyard.co.kr",
+    "subject": "B-21 블록 추가 자재 구매 승인 요청",
+    "body": "재무팀에 승인 요청드립니다.\nB-21 블록 설계 변경으로 인해 추가 자재 구매가 필요합니다.\n예상 금액은 약 1억 5천만 원입니다.\n첨부된 견적서 및 구매 내역서를 검토해 주시기 바랍니다.\n공정 일정상 1월 14일까지 승인 요청드립니다.\n문의사항은 연락 바랍니다.",
+    "date": "2026-01-05 09:05"
+  },
+  {
+    "message_id": "MSG-20260110-006",
+    "in_reply_to": null,
+    "sender": "qa_team@shipyard.co.kr",
+    "receiver": "welding_team@shipyard.co.kr",
+    "subject": "6도크 용접 품질 재검사 요청 건",
+    "body": "안녕하세요.\n6도크 작업 중 일부 용접부에서 품질 기준 미달 항목이 확인되었습니다.\n해당 구간에 대해 재검사가 필요합니다.\n첨부된 비파괴 검사 리포트를 확인해 주시기 바랍니다.\n조치 계획을 1월 14일까지 회신 부탁드립니다.\n추가 문의는 QA팀으로 연락 바랍니다.",
+    "date": "2026-01-06 14:30"
+  },
+  {
+    "message_id": "MSG-20260110-007",
+    "in_reply_to": null,
+    "sender": "it_support@shipyard.co.kr",
+    "receiver": "all_staff@shipyard.co.kr",
+    "subject": "설계 서버 정기 점검 안내",
+    "body": "전사 안내드립니다.\n설계 서버 안정성 확보를 위해 정기 점검을 진행합니다.\n점검 일시는 1월 15일 19:00부터 22:00까지입니다.\n점검 중에는 설계 시스템 접속이 제한됩니다.\n자세한 내용은 첨부 안내문을 참고해 주시기 바랍니다.\n불편을 드려 죄송합니다.",
+    "date": "2026-01-07 17:50"
+  },
+  {
+    "message_id": "MSG-20260110-008",
+    "in_reply_to": null,
+    "sender": "design_team@shipyard.co.kr",
+    "receiver": "pm_park@shipyard.co.kr",
+    "subject": "LNGC 3호선 공정 지연 회의 결과 공유",
+    "body": "금일 진행된 공정 지연 관련 회의 결과를 공유드립니다.\n주요 원인은 자재 수급 지연으로 확인되었습니다.\n공정 순서 일부 조정이 필요하다는 의견이 있었습니다.\n첨부된 회의록을 참고해 주시기 바랍니다.\n추가 의견 있으시면 회신 부탁드립니다.\n관련 자료는 별도 전달 예정입니다.",
+    "date": "2026-01-08 16:10"
+  },
+  {
+    "message_id": "MSG-20260110-009",
+    "in_reply_to": null,
+    "sender": "ceo_office@shipyard.co.kr",
+    "receiver": "all_team_leads@shipyard.co.kr",
+    "subject": "2026년 상반기 경영 방침 공유 회의 안내",
+    "body": "팀장님들께 안내드립니다.\n2026년 상반기 경영 방침 공유 회의를 진행하고자 합니다.\n회의는 1월 17일 오전 10시에 진행됩니다.\n장소는 본관 대회의실입니다.\n첨부된 자료를 사전 검토해 주시기 바랍니다.\n회의 참석 여부 회신 부탁드립니다.",
+    "date": "2026-01-09 18:00"
+  },
+  {
+    "message_id": "MSG-20260110-010",
+    "in_reply_to": "MSG-20260110-005",
+    "sender": "finance@shipyard.co.kr",
+    "receiver": "procurement@shipyard.co.kr",
+    "subject": "RE: B-21 블록 추가 자재 구매 승인 요청",
+    "body": "요청하신 추가 자재 구매 건 검토 완료하였습니다.\n첨부 견적서 기준으로 예산 범위 내임을 확인하였습니다.\n결재는 금일 중 시스템 상 처리 예정입니다.\n결재 완료 후 다시 안내드리겠습니다.\n확인 부탁드립니다.",
+    "date": "2026-01-10 09:25"
+  },
+  {
+    "message_id": "MSG-20260110-011",
+    "in_reply_to": null,
+    "sender": "pm_kim@shipyard.co.kr",
+    "receiver": "design_team@shipyard.co.kr",
+    "subject": "신규 선박 설계 도면 제출 요청",
+    "body": "안녕하세요.\n신규 선박 설계 도면 제출을 요청드립니다.\n도면은 1월 20일까지 제출해 주시기 바랍니다.\n첨부된 설계 기준을 참고해 주세요.\n추가 문의는 PM팀으로 연락 바랍니다.\n자료 제출 후 회신 부탁드립니다.",
+    "date": "2026-01-11 09:30"
+  },
+  {
+    "message_id": "MSG-20260110-012",
+    "in_reply_to": "MSG-20260110-011",
+    "sender": "design_lead@shipyard.co.kr",
+    "receiver": "pm_kim@shipyard.co.kr",
+    "subject": "설계 도면 검토 요청",
+    "body": "첨부된 설계 도면을 기준으로 구조 검토를 진행 중입니다.\n보강재 위치 조정이 필요할 것으로 판단됩니다.\n검토 결과는 1월 18일까지 공유드리겠습니다.\n추가 자료 있으시면 전달 부탁드립니다.\n검토 완료 후 회신드리겠습니다.",
+    "date": "2026-01-12 10:45"
+  },
+  {
+    "message_id": "MSG-20260110-013",
+    "in_reply_to": null,
+    "sender": "planning@shipyard.co.kr",
+    "receiver": "all_staff@shipyard.co.kr",
+    "subject": "2월 정기 안전 점검 결과 안내",
+    "body": "전사 공지드립니다.\n2월 정기 안전 점검이 성공적으로 완료되었습니다.\n점검 결과 일부 작업 구역에서 개선 사항이 도출되었습니다.\n자세한 내용은 첨부 공지문을 참고해 주시기 바랍니다.\n안전 수칙 준수 부탁드립니다.\n문의사항은 안전팀으로 연락 바랍니다.",
+    "date": "2026-01-13 17:00"
+  },
+  {
+    "message_id": "MSG-20260110-014",
+    "in_reply_to": null,
+    "sender": "pm_park@shipyard.co.kr",
+    "receiver": "eng_team@shipyard.co.kr",
+    "subject": "신규 프로젝트 회의 소집",
+    "body": "안녕하세요.\n신규 프로젝트 착수 관련 회의를 소집합니다.\n회의는 1월 18일 오후 3시에 진행 예정입니다.\n회의 안건은 프로젝트 일정, 인력 배치, 예산 검토입니다.\n회의 자료는 사전에 공유 부탁드립니다.\n참석자 명단도 회신 바랍니다.",
+    "date": "2026-01-14 12:00"
+  },
+  {
+    "message_id": "MSG-20260110-015",
+    "in_reply_to": null,
+    "sender": "procurement@shipyard.co.kr",
+    "receiver": "finance@shipyard.co.kr",
+    "subject": "신규 프로젝트 자재 구매 승인 요청",
+    "body": "재무팀에 승인 요청드립니다.\n신규 프로젝트 착수로 인해 자재 구매가 필요합니다.\n예상 금액은 약 2억 원입니다.\n첨부된 견적서 및 구매 내역서를 검토해 주시기 바랍니다.\n공정 일정상 1월 19일까지 승인 요청드립니다.\n문의사항은 연락 바랍니다.",
+    "date": "2026-01-15 09:50"
+  },
+  {
+    "message_id": "MSG-20260110-016",
+    "in_reply_to": null,
+    "sender": "qa_team@shipyard.co.kr",
+    "receiver": "welding_team@shipyard.co.kr",
+    "subject": "신규 프로젝트 용접 품질 검사 요청",
+    "body": "안녕하세요.\n신규 프로젝트 용접 품질 검사를 요청드립니다.\n첨부된 검사 기준을 확인해 주시기 바랍니다.\n검사 결과는 1월 20일까지 회신 부탁드립니다.\n추가 문의는 QA팀으로 연락 바랍니다.\n검사 완료 후 회신 부탁드립니다.",
+    "date": "2026-01-16 15:00"
+  },
+  {
+    "message_id": "MSG-20260110-017",
+    "in_reply_to": null,
+    "sender": "it_support@shipyard.co.kr",
+    "receiver": "all_staff@shipyard.co.kr",
+    "subject": "신규 시스템 점검 안내",
+    "body": "전사 안내드립니다.\n신규 시스템 안정성 확보를 위해 점검을 진행합니다.\n점검 일시는 1월 21일 19:00부터 22:00까지입니다.\n점검 중에는 시스템 접속이 제한됩니다.\n자세한 내용은 첨부 안내문을 참고해 주시기 바랍니다.\n불편을 드려 죄송합니다.",
+    "date": "2026-01-17 18:30"
+  },
+  {
+    "message_id": "MSG-20260110-018",
+    "in_reply_to": null,
+    "sender": "design_team@shipyard.co.kr",
+    "receiver": "pm_park@shipyard.co.kr",
+    "subject": "신규 프로젝트 회의 결과 공유",
+    "body": "금일 진행된 신규 프로젝트 회의 결과를 공유드립니다.\n주요 안건은 일정 조정, 인력 배치, 예산 검토였습니다.\n첨부된 회의록을 참고해 주시기 바랍니다.\n추가 의견 있으시면 회신 부탁드립니다.\n관련 자료는 별도 전달 예정입니다.",
+    "date": "2026-01-18 16:30"
+  },
+  {
+    "message_id": "MSG-20260110-019",
+    "in_reply_to": null,
+    "sender": "ceo_office@shipyard.co.kr",
+    "receiver": "all_team_leads@shipyard.co.kr",
+    "subject": "2026년 하반기 경영 방침 공유 회의 안내",
+    "body": "팀장님들께 안내드립니다.\n2026년 하반기 경영 방침 공유 회의를 진행하고자 합니다.\n회의는 1월 24일 오전 10시에 진행됩니다.\n장소는 본관 대회의실입니다.\n첨부된 자료를 사전 검토해 주시기 바랍니다.\n회의 참석 여부 회신 부탁드립니다.",
+    "date": "2026-01-19 18:50"
+  },
+  {
+    "message_id": "MSG-20260110-020",
+    "in_reply_to": "MSG-20260110-015",
+    "sender": "finance@shipyard.co.kr",
+    "receiver": "procurement@shipyard.co.kr",
+    "subject": "RE: 신규 프로젝트 자재 구매 승인 요청",
+    "body": "요청하신 자재 구매 건 검토 완료하였습니다.\n첨부 견적서 기준으로 예산 범위 내임을 확인하였습니다.\n결재는 금일 중 시스템 상 처리 예정입니다.\n결재 완료 후 다시 안내드리겠습니다.\n확인 부탁드립니다.",
+    "date": "2026-01-20 10:10"
+  },
+  {
+    "message_id": "MSG-20260110-021",
+    "in_reply_to": null,
+    "sender": "pm_kim@shipyard.co.kr",
+    "receiver": "design_team@shipyard.co.kr",
+    "subject": "신규 선박 설계 기준 자료 제출 요청",
+    "body": "안녕하세요.\n신규 선박 설계 기준 자료 제출을 요청드립니다.\n자료는 1월 25일까지 제출해 주시기 바랍니다.\n첨부된 설계 기준을 참고해 주세요.\n추가 문의는 PM팀으로 연락 바랍니다.\n자료 제출 후 회신 부탁드립니다.",
+    "date": "2026-01-21 09:40"
+  },
+  {
+    "message_id": "MSG-20260110-022",
+    "in_reply_to": "MSG-20260110-021",
+    "sender": "design_lead@shipyard.co.kr",
+    "receiver": "pm_kim@shipyard.co.kr",
+    "subject": "설계 기준 검토 요청",
+    "body": "첨부된 설계 기준을 기준으로 구조 검토를 진행 중입니다.\n보강재 위치 조정이 필요할 것으로 판단됩니다.\n검토 결과는 1월 23일까지 공유드리겠습니다.\n추가 자료 있으시면 전달 부탁드립니다.\n검토 완료 후 회신드리겠습니다.",
+    "date": "2026-01-22 11:15"
+  },
+  {
+    "message_id": "MSG-20260110-023",
+    "in_reply_to": null,
+    "sender": "planning@shipyard.co.kr",
+    "receiver": "all_staff@shipyard.co.kr",
+    "subject": "3월 정기 안전 점검 일정 안내",
+    "body": "전사 공지드립니다.\n3월 정기 안전 점검이 아래 일정으로 진행될 예정입니다.\n점검 기간은 3월 10일부터 3월 12일까지입니다.\n점검 중 일부 작업 구역 출입이 제한될 수 있습니다.\n자세한 내용은 첨부 공지문을 참고해 주시기 바랍니다.\n안전 수칙 준수 부탁드립니다.",
+    "date": "2026-01-23 16:55"
+  },
+  {
+    "message_id": "MSG-20260110-024",
+    "in_reply_to": null,
+    "sender": "pm_park@shipyard.co.kr",
+    "receiver": "eng_team@shipyard.co.kr",
+    "subject": "3월 신규 프로젝트 회의 소집",
+    "body": "안녕하세요.\n3월 신규 프로젝트 착수 관련 회의를 소집합니다.\n회의는 3월 15일 오후 3시에 진행 예정입니다.\n회의 안건은 프로젝트 일정, 인력 배치, 예산 검토입니다.\n회의 자료는 사전에 공유 부탁드립니다.\n참석자 명단도 회신 바랍니다.",
+    "date": "2026-01-24 12:30"
+  },
+  {
+    "message_id": "MSG-20260110-025",
+    "in_reply_to": null,
+    "sender": "procurement@shipyard.co.kr",
+    "receiver": "finance@shipyard.co.kr",
+    "subject": "3월 신규 프로젝트 자재 구매 승인 요청",
+    "body": "재무팀에 승인 요청드립니다.\n3월 신규 프로젝트 착수로 인해 자재 구매가 필요합니다.\n예상 금액은 약 2억 5천만 원입니다.\n첨부된 견적서 및 구매 내역서를 검토해 주시기 바랍니다.\n공정 일정상 3월 16일까지 승인 요청드립니다.\n문의사항은 연락 바랍니다.",
+    "date": "2026-01-25 10:30"
+  },
+  {
+    "message_id": "MSG-20260110-026",
+    "in_reply_to": null,
+    "sender": "qa_team@shipyard.co.kr",
+    "receiver": "welding_team@shipyard.co.kr",
+    "subject": "3월 신규 프로젝트 용접 품질 검사 요청",
+    "body": "안녕하세요.\n3월 신규 프로젝트 용접 품질 검사를 요청드립니다.\n첨부된 검사 기준을 확인해 주시기 바랍니다.\n검사 결과는 3월 18일까지 회신 부탁드립니다.\n추가 문의는 QA팀으로 연락 바랍니다.\n검사 완료 후 회신 부탁드립니다.",
+    "date": "2026-01-26 15:30"
+  },
+  {
+    "message_id": "MSG-20260110-027",
+    "in_reply_to": null,
+    "sender": "it_support@shipyard.co.kr",
+    "receiver": "all_staff@shipyard.co.kr",
+    "subject": "3월 신규 시스템 점검 안내",
+    "body": "전사 안내드립니다.\n3월 신규 시스템 안정성 확보를 위해 점검을 진행합니다.\n점검 일시는 3월 21일 19:00부터 22:00까지입니다.\n점검 중에는 시스템 접속이 제한됩니다.\n자세한 내용은 첨부 안내문을 참고해 주시기 바랍니다.\n불편을 드려 죄송합니다.",
+    "date": "2026-01-27 18:55"
+  },
+  {
+    "message_id": "MSG-20260110-028",
+    "in_reply_to": "MSG-20260110-024",
+    "sender": "design_team@shipyard.co.kr",
+    "receiver": "pm_park@shipyard.co.kr",
+    "subject": "3월 신규 프로젝트 회의 결과 공유",
+    "body": "금일 진행된 3월 신규 프로젝트 회의 결과를 공유드립니다.\n주요 안건은 일정 조정, 인력 배치, 예산 검토였습니다.\n첨부된 회의록을 참고해 주시기 바랍니다.\n추가 의견 있으시면 회신 부탁드립니다.\n관련 자료는 별도 전달 예정입니다.",
+    "date": "2026-01-28 16:40"
+  },
+  {
+    "message_id": "MSG-20260110-029",
+    "in_reply_to": null,
+    "sender": "ceo_office@shipyard.co.kr",
+    "receiver": "all_team_leads@shipyard.co.kr",
+    "subject": "2026년 2분기 경영 방침 공유 회의 안내",
+    "body": "팀장님들께 안내드립니다.\n2026년 2분기 경영 방침 공유 회의를 진행하고자 합니다.\n회의는 3월 25일 오전 10시에 진행됩니다.\n장소는 본관 대회의실입니다.\n첨부된 자료를 사전 검토해 주시기 바랍니다.\n회의 참석 여부 회신 부탁드립니다.",
+    "date": "2026-01-29 19:00"
+  },
+  {
+    "message_id": "MSG-20260110-030",
+    "in_reply_to": "MSG-20260110-025",
+    "sender": "finance@shipyard.co.kr",
+    "receiver": "procurement@shipyard.co.kr",
+    "subject": "RE: 3월 신규 프로젝트 자재 구매 승인 요청",
+    "body": "요청하신 자재 구매 건 검토 완료하였습니다.\n첨부 견적서 기준으로 예산 범위 내임을 확인하였습니다.\n결재는 금일 중 시스템 상 처리 예정입니다.\n결재 완료 후 다시 안내드리겠습니다.\n확인 부탁드립니다.",
+    "date": "2026-01-30 10:50"
+  }
+]

@@ -37,6 +37,14 @@ function scoreText(text: string, tokens: string[]): number {
   return score;
 }
 
+function normalizeHasAttachment(
+  value: unknown
+): "true" | "false" | null {
+  if (value === "true" || value === true) return "true";
+  if (value === "false" || value === false) return "false";
+  return null;
+}
+
 export class LocalSQLiteStorage implements IStorage {
   private db: Database.Database;
   private dataDir: string;
@@ -61,6 +69,7 @@ export class LocalSQLiteStorage implements IStorage {
         sender TEXT NOT NULL DEFAULT '',
         date TEXT NOT NULL DEFAULT '',
         body TEXT NOT NULL DEFAULT '',
+        has_attachment TEXT DEFAULT 'false',
         importance TEXT,
         label TEXT,
         classification TEXT,
@@ -164,56 +173,86 @@ export class LocalSQLiteStorage implements IStorage {
   }
 
   async insertEmail(email: InsertEmail): Promise<Email> {
+    const hasAttachment = normalizeHasAttachment(email.hasAttachment);
+
     const result = this.db.prepare(`
-      INSERT INTO emails (subject, sender, date, body, importance, label, classification, classification_confidence, is_processed)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO emails (
+        subject,
+        sender,
+        date,
+        body,
+        has_attachment,
+        importance,
+        label,
+        classification,
+        classification_confidence,
+        is_processed
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
-      email.subject || '',
-      email.sender || '',
-      email.date || '',
-      email.body || '',
-      email.importance || null,
-      email.label || null,
-      email.classification || null,
-      email.classificationConfidence || null,
-      email.isProcessed || 'false'
+      email.subject ?? '',
+      email.sender ?? '',
+      email.date ?? '',
+      email.body ?? '',
+      hasAttachment,
+      email.importance ?? null,
+      email.label ?? null,
+      email.classification ?? null,
+      email.classificationConfidence ?? null,
+      email.isProcessed ?? 'false'
     );
-    
+
     return {
       id: result.lastInsertRowid as number,
-      subject: email.subject || '',
-      sender: email.sender || '',
-      date: email.date || '',
-      body: email.body || '',
-      importance: email.importance || null,
-      label: email.label || null,
-      classification: email.classification || null,
-      classificationConfidence: email.classificationConfidence || null,
-      isProcessed: email.isProcessed || 'false',
+      subject: email.subject ?? '',
+      sender: email.sender ?? '',
+      date: email.date ?? '',
+      body: email.body ?? '',
+      hasAttachment,
+      importance: email.importance ?? null,
+      label: email.label ?? null,
+      classification: email.classification ?? null,
+      classificationConfidence: email.classificationConfidence ?? null,
+      isProcessed: email.isProcessed ?? 'false',
       createdAt: new Date(),
     };
   }
 
   async insertEmails(emailsToInsert: InsertEmail[]): Promise<number> {
     if (emailsToInsert.length === 0) return 0;
-    
+
     const insert = this.db.prepare(`
-      INSERT INTO emails (subject, sender, date, body, importance, label, classification, classification_confidence, is_processed)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO emails (
+        subject,
+        sender,
+        date,
+        body,
+        has_attachment,
+        importance,
+        label,
+        classification,
+        classification_confidence,
+        is_processed
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     const insertMany = this.db.transaction((emails: InsertEmail[]) => {
       for (const email of emails) {
+        const hasAttachment =
+          String(email.hasAttachment) === 'true' ? 'true' : 'false';
+
         insert.run(
-          email.subject || '',
-          email.sender || '',
-          email.date || '',
-          email.body || '',
-          email.importance || null,
-          email.label || null,
-          email.classification || null,
-          email.classificationConfidence || null,
-          email.isProcessed || 'false'
+          email.subject ?? '',
+          email.sender ?? '',
+          email.date ?? '',
+          email.body ?? '',
+          hasAttachment,                // ✅ 항상 string
+          email.importance ?? null,
+          email.label ?? null,
+          email.classification ?? null,
+          email.classificationConfidence ?? null,
+          email.isProcessed ?? 'false'
         );
       }
       return emails.length;
@@ -224,54 +263,75 @@ export class LocalSQLiteStorage implements IStorage {
 
   async insertEmailsAndGetIds(emailsToInsert: InsertEmail[]): Promise<Email[]> {
     if (emailsToInsert.length === 0) return [];
-    
+
     const results: Email[] = [];
-    
+
     const insert = this.db.prepare(`
-      INSERT INTO emails (subject, sender, date, body, importance, label, classification, classification_confidence, is_processed)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO emails (
+        subject,
+        sender,
+        date,
+        body,
+        has_attachment,
+        importance,
+        label,
+        classification,
+        classification_confidence,
+        is_processed
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     for (const email of emailsToInsert) {
+      const hasAttachment =
+        email.hasAttachment === "true" ? "true" : "false";
+
       const result = insert.run(
-        email.subject || '',
-        email.sender || '',
-        email.date || '',
-        email.body || '',
-        email.importance || null,
-        email.label || null,
-        email.classification || null,
-        email.classificationConfidence || null,
-        email.isProcessed || 'false'
+        email.subject ?? '',
+        email.sender ?? '',
+        email.date ?? '',
+        email.body ?? '',
+        hasAttachment,              // ✅ string only
+        email.importance ?? null,
+        email.label ?? null,
+        email.classification ?? null,
+        email.classificationConfidence ?? null,
+        email.isProcessed ?? 'false'
       );
-      
+
       results.push({
         id: result.lastInsertRowid as number,
-        subject: email.subject || '',
-        sender: email.sender || '',
-        date: email.date || '',
-        body: email.body || '',
-        importance: email.importance || null,
-        label: email.label || null,
-        classification: email.classification || null,
-        classificationConfidence: email.classificationConfidence || null,
-        isProcessed: email.isProcessed || 'false',
+        subject: email.subject ?? '',
+        sender: email.sender ?? '',
+        date: email.date ?? '',
+        body: email.body ?? '',
+        hasAttachment,
+        importance: email.importance ?? null,
+        label: email.label ?? null,
+        classification: email.classification ?? null,
+        classificationConfidence: email.classificationConfidence ?? null,
+        isProcessed: email.isProcessed ?? 'false',
         createdAt: new Date(),
       });
     }
-    
+
     return results;
   }
 
   async getEmailById(id: number): Promise<Email | undefined> {
-    const row = this.db.prepare('SELECT * FROM emails WHERE id = ?').get(id) as { id: number; subject: string; sender: string; date: string; body: string; importance: string | null; label: string | null; classification: string | null; classification_confidence: string | null; is_processed: string | null; created_at: string } | undefined;
+    const row = this.db
+      .prepare('SELECT * FROM emails WHERE id = ?')
+      .get(id) as any;
+
     if (!row) return undefined;
+
     return {
       id: row.id,
       subject: row.subject,
       sender: row.sender,
       date: row.date,
       body: row.body,
+      hasAttachment: normalizeHasAttachment(row.has_attachment),
       importance: row.importance,
       label: row.label,
       classification: row.classification,
@@ -282,13 +342,17 @@ export class LocalSQLiteStorage implements IStorage {
   }
 
   async getAllEmails(limit: number = 1000): Promise<Email[]> {
-    const rows = this.db.prepare('SELECT * FROM emails ORDER BY created_at DESC LIMIT ?').all(limit) as Array<{ id: number; subject: string; sender: string; date: string; body: string; importance: string | null; label: string | null; classification: string | null; classification_confidence: string | null; is_processed: string | null; created_at: string }>;
+    const rows = this.db
+      .prepare('SELECT * FROM emails ORDER BY created_at DESC LIMIT ?')
+      .all(limit) as any[];
+
     return rows.map(row => ({
       id: row.id,
       subject: row.subject,
       sender: row.sender,
       date: row.date,
       body: row.body,
+      hasAttachment: normalizeHasAttachment(row.has_attachment),
       importance: row.importance,
       label: row.label,
       classification: row.classification,
@@ -299,13 +363,19 @@ export class LocalSQLiteStorage implements IStorage {
   }
 
   async getUnprocessedEmails(): Promise<Email[]> {
-    const rows = this.db.prepare("SELECT * FROM emails WHERE is_processed = 'false' ORDER BY created_at").all() as Array<{ id: number; subject: string; sender: string; date: string; body: string; importance: string | null; label: string | null; classification: string | null; classification_confidence: string | null; is_processed: string | null; created_at: string }>;
+    const rows = this.db
+      .prepare(
+        "SELECT * FROM emails WHERE is_processed = 'false' ORDER BY created_at"
+      )
+      .all() as any[];
+
     return rows.map(row => ({
       id: row.id,
       subject: row.subject,
       sender: row.sender,
       date: row.date,
       body: row.body,
+      hasAttachment: normalizeHasAttachment(row.has_attachment),
       importance: row.importance,
       label: row.label,
       classification: row.classification,

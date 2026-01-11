@@ -235,43 +235,63 @@ export async function classifyEmail(
   body: string,
   sender: string
 ): Promise<ClassificationResult> {
-  const systemPrompt = `당신은 조선소 이메일 분류 전문가입니다. 이메일을 다음 5가지 카테고리 중 하나로 분류하세요:
+  const systemPrompt = `당신은 조선소 이메일 분류 전문가입니다. 
+  아래의 **판단 알고리즘**과 **예시**를 엄격히 준수하여 분류하세요.
 
-- 업무요청: 작업 지시, 보고서 제출 요청, 협조 요청, 검토 요청 등
-- 회의: 회의 일정, 참석 요청, 회의록 등
-- 첨부파일: 첨부파일이 있는 이메일 (도면, 문서, 사진 등)
-- 결재요청: 승인 요청, 발주 승인, 계약 승인 등
-- 공지: 일반 공지사항, 안내, 정보 공유, 단순 참조
+  ### [판단 알고리즘 - 이 순서대로 검토하세요]
 
-**분류 우선순위:**
-1. 첨부파일이 있으면 무조건 "첨부파일"
-2. "승인", "결재", "허가" 키워드가 있으면 "결재요청"
-3. "회의", "미팅" 키워드가 있으면 "회의"
-4. "요청", "제출", "보고" 키워드가 있으면 "업무요청"
-5. 그 외는 "공지"
+  1. **결재요청 (Approval)**: 
+    - 핵심 키워드: 금액(원, $), 예산, 승인 바랍니다, 결재, 품의, 정산.
+    - 판단 기준: 경제적 의사결정이나 비용 집행에 대한 허가가 주된 목적인 경우.
 
-반드시 다음 JSON 형식으로만 응답하세요:
-{"classification": "카테고리", "confidence": "high/medium/low"}`;
+  2. **회의 (Meeting)**: 
+    - 핵심 키워드: 일시, 장소, 참석자, Agenda, 회의록, 미팅 소집.
+    - 판단 기준: 특정 시간에 모여서 논의하는 장을 마련하거나 그 결과를 공유하는 경우.
 
-  const userPrompt = `다음 이메일을 분류해주세요:
+  3. **업무요청 (Task)**: 
+    - **중요**: 수신자가 메일을 읽고 '실제로 작업을 수행'하거나 '결과를 보고'해야 한다면 반드시 이 카테고리입니다.
+    - 핵심 키워드: 수행 의뢰, 측정 요청, 점검 요망, 수정 바랍니다, 제출, 조치 계획, 기한(~까지).
+    - 예시: NDT 검사 의뢰, 소음 측정 요청, 장비 점검 지시 등.
+
+  4. **공지 (Announcement)**: 
+    - 판단 기준: 수신자가 '알고만 있으면 되는' 정보. 개별적인 작업이나 결과 보고가 필요 없는 전사 안내문.
+    - 예시: 시스템 점검 안내, 복장 규정 공지, 식단 안내, 인사 발령.
+
+  ### [강화된 예시 (Few-Shot)]
+  - "용접부 NDT 검사 수행 의뢰" -> **업무요청** (검사라는 구체적 행동 필요)
+  - "작업장 내 소음 측정 및 분석 요청" -> **업무요청** (측정 및 결과 제출 필요)
+  - "호이스트 와이어 로프 점검 요청" -> **업무요청** (현장 점검 액션 필요)
+  - "B-21 블록 추가 자재 구매 승인" -> **결재요청** (비용 승인 필요)
+  - "공정 지연 대응 회의 소집" -> **회의** (미팅 약속)
+  - "2월 정기 안전 점검 기간 안내" -> **공지** (단순 일정 참고용 정보 전달)
+
+  ### [응답 규칙]
+  - 반드시 아래 JSON 형식으로만 답변하고 다른 설명은 절대 생략하세요.
+  {"classification": "업무요청|회의|결재요청|공지", "reason": "수신자의 액션 필요 여부를 근거로 기술", "confidence": "high|medium|low"}`;
+
+  const userPrompt = `다음 이메일을 분류해주세요.
 발신자: ${sender}
 제목: ${subject}
-내용: ${body.substring(0, 500)}`;
+내용:
+${body.substring(0, 800)}`;
 
   try {
+    // 옵션 객체를 제거하여 TypeScript 에러(TS2345)를 해결합니다.
     const response = await chatWithOllama([
       { role: "system", content: systemPrompt },
       { role: "user", content: userPrompt },
     ]);
 
+    // JSON 형식만 추출하여 파싱
     const jsonMatch = response.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
       const result = JSON.parse(jsonMatch[0]);
       return {
-        classification: result.classification || "공지",
-        confidence: result.confidence || "medium",
+        classification: result.classification ?? "공지",
+        confidence: result.confidence ?? "medium",
       };
     }
+
     return { classification: "공지", confidence: "low" };
   } catch (error) {
     console.error("Classification error:", error);

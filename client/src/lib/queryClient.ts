@@ -1,4 +1,4 @@
-import { QueryClient, QueryFunction } from "@tanstack/react-query";
+﻿import { QueryClient, QueryFunction } from "@tanstack/react-query";
 
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
@@ -47,9 +47,7 @@ export const queryClient = new QueryClient({
       queryFn: getQueryFn({ on401: "throw" }),
       refetchInterval: false,
       refetchOnWindowFocus: false,
-      staleTime: 0,  // 항상 최신 데이터
-      cacheTime: 0,  // 캐시 사용 안 함
-      refetchOnMount: true,  // 마운트시 항상 새로 가져옴
+      staleTime: 0,  // ??긽 理쒖떊 ?곗씠??      gcTime: 0,  // 罹먯떆 ?ъ슜 ????      refetchOnMount: true,  // 留덉슫?몄떆 ??긽 ?덈줈 媛?몄샂
       retry: false,
     },
     mutations: {
@@ -57,3 +55,4 @@ export const queryClient = new QueryClient({
     },
   },
 });
+

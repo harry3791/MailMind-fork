@@ -18,16 +18,7 @@ function Navigation() {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:relative md:border-t-0 md:border-r md:h-screen md:w-16">
       <div className="flex md:flex-col items-center justify-around md:justify-start md:pt-4 gap-1 p-2">
-        <Link href="/">
-          <Button 
-            variant={location === "/" ? "secondary" : "ghost"} 
-            size="icon"
-            className="h-12 w-12"
-            data-testid="nav-inbox"
-          >
-            <Inbox className="h-5 w-5" />
-          </Button>
-        </Link>
+        {/* 1. 순서 변경: Home (Mail 아이콘 / /search 경로)을 위로 올림 */}
         <Link href="/search">
           <Button 
             variant={location === "/search" ? "secondary" : "ghost"} 
@@ -38,6 +29,7 @@ function Navigation() {
             <Mail className="h-5 w-5" />
           </Button>
         </Link>
+
         <Link href="/chat">
           <Button 
             variant={location === "/chat" ? "secondary" : "ghost"} 
@@ -48,6 +40,19 @@ function Navigation() {
             <MessageCircle className="h-5 w-5" />
           </Button>
         </Link>
+
+        {/* 2. 순서 변경: Inbox (Inbox 아이콘 / / 경로)를 아래로 내림 */}
+        <Link href="/">
+          <Button 
+            variant={location === "/" ? "secondary" : "ghost"} 
+            size="icon"
+            className="h-12 w-12"
+            data-testid="nav-inbox"
+          >
+            <Inbox className="h-5 w-5" />
+          </Button>
+        </Link>
+        
         <Link href="/calendar">
           <Button 
             variant={location === "/calendar" ? "secondary" : "ghost"} 

@@ -1,6 +1,6 @@
 import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
+import { storage } from "./storage.ts";
 import multer from "multer";
 import { 
   chatRequestSchema, 
@@ -11,10 +11,10 @@ import {
   type SearchResult,
   type AiChatResponse,
   type EventExtractionResponse
-} from "@shared/schema";
+} from "../shared/schema.ts";
 import { ZodError } from "zod";
-import { chatWithOllama, extractEventsFromEmail, checkOllamaConnection, classifyEmail } from "./ollama";
-import { parsePSTFromBuffer } from "./pst-parser";
+import { chatWithOllama, extractEventsFromEmail, checkOllamaConnection, classifyEmail } from "./ollama.ts";
+import { parsePSTFromBuffer } from "./pst-parser.ts";
 
 const upload = multer({ 
   storage: multer.memoryStorage(),
@@ -150,18 +150,11 @@ export async function registerRoutes(
             return;
           }
           emailsToImport = parseResult.emails;
-        } else if (ext === "mbox") {
-          res.status(400).json({
-            ok: false,
-            inserted: 0,
-            message: "MBOX 파일은 현재 지원되지 않습니다. PST 또는 JSON 형식을 사용해 주세요.",
-          });
-          return;
         } else {
           res.status(400).json({
             ok: false,
             inserted: 0,
-            message: "지원되지 않는 파일 형식입니다. JSON 파일을 사용해 주세요.",
+            message: "지원되지 않는 파일 형식입니다. JSON 또는 PST 파일을 사용해 주세요.",
           });
           return;
         }
@@ -179,9 +172,15 @@ export async function registerRoutes(
         return;
       }
 
-      const insertedEmails = await storage.insertEmailsAndGetIds(emailsToImport);
+      // 🔧 hasAttachment 명시적으로 주입 (JSON/PST 공통)
+      const emailsWithAttachment = emailsToImport.map(email => ({
+        ...email,
+        hasAttachment: "false" as const, // 첨부파일 메타 없으면 기본 false
+      }));
+      const insertedEmails = await storage.insertEmailsAndGetIds(emailsWithAttachment);
+
       const insertedCount = insertedEmails.length;
-      
+
       await storage.logImport({
         filename,
         emailsImported: insertedCount,
@@ -189,17 +188,45 @@ export async function registerRoutes(
 
       let classifiedCount = 0;
       let eventsExtractedCount = 0;
+      let skippedCount = 0;
 
       const ollamaConnected = await checkOllamaConnection();
-      
+
       if (ollamaConnected) {
         for (const email of insertedEmails) {
           try {
-            const classification = await classifyEmail(email.subject, email.body, email.sender);
-            await storage.updateEmailClassification(email.id, classification.classification, classification.confidence);
+            // 1️⃣ 분류 시도
+            const classification = await classifyEmail(
+              email.subject,
+              email.body,
+              email.sender
+            );
+
+            // 2️⃣ 분류 결과 가드 (핵심)
+            if (!classification?.classification) {
+              console.warn(
+                `[SKIP] Invalid classification for email ${email.id}`,
+                classification
+              );
+              skippedCount++;
+              continue;
+            }
+
+            // 3️⃣ 분류 저장
+            await storage.updateEmailClassification(
+              email.id,
+              classification.classification,
+              classification.confidence
+            );
             classifiedCount++;
 
-            const events = await extractEventsFromEmail(email.subject, email.body, email.date);
+            // 4️⃣ 일정 추출
+            const events = await extractEventsFromEmail(
+              email.subject,
+              email.body,
+              email.date
+            );
+
             for (const event of events) {
               await storage.addCalendarEvent({
                 emailId: email.id,
@@ -212,24 +239,26 @@ export async function registerRoutes(
               eventsExtractedCount++;
             }
 
+            // 5️⃣ 여기까지 성공한 경우에만 processed 처리
             await storage.markEmailProcessed(email.id);
+
           } catch (err) {
             console.error(`Error processing email ${email.id}:`, err);
+            skippedCount++;
           }
         }
       }
 
-      const result = {
+      res.json({
         ok: true,
         inserted: insertedCount,
         classified: classifiedCount,
+        skipped: skippedCount,
         eventsExtracted: eventsExtractedCount,
-        message: ollamaConnected 
-          ? `${insertedCount}개의 이메일을 가져왔습니다. ${classifiedCount}개 분류, ${eventsExtractedCount}개 일정 추출 완료.`
+        message: ollamaConnected
+          ? `${insertedCount}개의 이메일을 가져왔습니다. ${classifiedCount}개 분류, ${skippedCount}개 건너뜀, ${eventsExtractedCount}개 일정 추출 완료.`
           : `${insertedCount}개의 이메일을 가져왔습니다. AI 서버 미연결로 자동 분류/일정 추출이 건너뛰어졌습니다.`,
-      };
-
-      res.json(result);
+      });
     } catch (error) {
       console.error("Import error:", error);
       res.status(500).json({
@@ -239,6 +268,7 @@ export async function registerRoutes(
       });
     }
   });
+
 
   app.post("/api/search", async (req: Request, res: Response) => {
     try {
@@ -484,6 +514,12 @@ export async function registerRoutes(
 
   app.post("/api/emails/:id/classify", async (req: Request, res: Response) => {
     try {
+      const ollamaConnected = await checkOllamaConnection();
+      if (!ollamaConnected) {
+        res.status(503).json({ error: "AI 서버에 연결할 수 없습니다." });
+        return;
+      }
+
       const emailId = parseInt(req.params.id);
       if (isNaN(emailId)) {
         res.status(400).json({ error: "잘못된 이메일 ID입니다." });
@@ -496,44 +532,116 @@ export async function registerRoutes(
         return;
       }
 
-      const classification = await classifyEmail(email.subject, email.body, email.sender);
-      await storage.updateEmailClassification(emailId, classification.classification, classification.confidence);
+      // 🔒 이미 분류된 경우 재분류 방지
+      if (email.classification && email.classification.trim() !== "") {
+        res.json({
+          success: true,
+          classification: email.classification,
+          confidence: email.classificationConfidence || "medium",
+          skipped: true,
+          message: "이미 분류된 이메일입니다.",
+        });
+        return;
+      }
 
-      res.json({ 
-        success: true, 
+      const classification = await classifyEmail(
+        email.subject,
+        email.body,
+        email.sender
+      );
+
+      // ❗ 분류 결과 유효성 가드
+      if (!classification?.classification) {
+        res.status(500).json({
+          error: "분류 결과가 유효하지 않습니다.",
+        });
+        return;
+      }
+
+      await storage.updateEmailClassification(
+        emailId,
+        classification.classification,
+        classification.confidence
+      );
+
+      // ✅ 단건 분류 성공 시에만 processed 처리
+      await storage.markEmailProcessed(emailId);
+
+      res.json({
+        success: true,
         classification: classification.classification,
-        confidence: classification.confidence 
+        confidence: classification.confidence,
       });
     } catch (error) {
       console.error("Classification error:", error);
-      res.status(500).json({ error: error instanceof Error ? error.message : "분류 중 오류가 발생했습니다." });
+      res.status(500).json({
+        error: error instanceof Error
+          ? error.message
+          : "분류 중 오류가 발생했습니다.",
+      });
     }
   });
 
   app.post("/api/emails/classify-all", async (_req: Request, res: Response) => {
     try {
+      const ollamaConnected = await checkOllamaConnection();
+      if (!ollamaConnected) {
+        res.status(503).json({ error: "AI 서버에 연결할 수 없습니다." });
+        return;
+      }
+
       const unprocessedEmails = await storage.getUnprocessedEmails();
-      
+
       let classified = 0;
+      let skipped = 0;
       let failed = 0;
-      
+
       for (const email of unprocessedEmails) {
         try {
-          const classification = await classifyEmail(email.subject, email.body, email.sender);
-          await storage.updateEmailClassification(email.id, classification.classification, classification.confidence);
+          // 🔒 이미 분류된 메일 → skip 처리
+          if (email.classification && email.classification.trim() !== "") {
+            await storage.markEmailProcessed(email.id);
+            skipped++;
+            continue;
+          }
+
+          const classification = await classifyEmail(
+            email.subject,
+            email.body,
+            email.sender
+          );
+
+          // ❗ 분류 결과 가드
+          if (!classification?.classification) {
+            console.warn(
+              `[SKIP] Email ${email.id} classification invalid`,
+              classification
+            );
+            failed++;
+            continue;
+          }
+
+          await storage.updateEmailClassification(
+            email.id,
+            classification.classification,
+            classification.confidence
+          );
+
           await storage.markEmailProcessed(email.id);
           classified++;
+
         } catch (error) {
           console.error(`Failed to classify email ${email.id}:`, error);
           failed++;
         }
       }
 
-      res.json({ 
-        success: true, 
+      res.json({
+        success: true,
         total: unprocessedEmails.length,
-        classified,
-        failed 
+        classified,   // 새로 분류한 메일
+        skipped,      // 이미 분류되어 있었던 메일
+        failed,
       });
     } catch (error) {
       console.error("Batch classification error:", error);
@@ -609,15 +717,55 @@ export async function registerRoutes(
       }
 
       const unprocessed = await storage.getUnprocessedEmails();
+
       let processedCount = 0;
+      let skippedCount = 0;
       let eventsCount = 0;
 
       for (const email of unprocessed) {
         try {
-          const classification = await classifyEmail(email.subject, email.body, email.sender);
-          await storage.updateEmailClassification(email.id, classification.classification, classification.confidence);
+          // 🔒 이미 분류된 메일은 재처리 금지
+          if (email.classification && email.classification.trim() !== "") {
+            await storage.markEmailProcessed(email.id);
+            skippedCount++;
+            continue;
+          }
 
-          const events = await extractEventsFromEmail(email.subject, email.body, email.date);
+          // 1️⃣ 분류 시도
+          const classification = await classifyEmail(
+            email.subject,
+            email.body,
+            email.sender
+          );
+
+          // 2️⃣ 분류 결과 유효성 가드
+          if (
+            !classification ||
+            !classification.classification ||
+            classification.classification.trim() === ""
+          ) {
+            console.warn(
+              `[SKIP] Invalid classification for email ${email.id}`,
+              classification
+            );
+            skippedCount++;
+            continue;
+          }
+
+          // 3️⃣ 분류 저장
+          await storage.updateEmailClassification(
+            email.id,
+            classification.classification,
+            classification.confidence
+          );
+
+          // 4️⃣ 일정 추출
+          const events = await extractEventsFromEmail(
+            email.subject,
+            email.body,
+            email.date
+          );
+
           for (const event of events) {
             await storage.addCalendarEvent({
               emailId: email.id,
@@ -630,18 +778,23 @@ export async function registerRoutes(
             eventsCount++;
           }
 
+          // 5️⃣ 여기까지 성공한 경우만 processed 처리
           await storage.markEmailProcessed(email.id);
           processedCount++;
+
         } catch (err) {
           console.error(`Error processing email ${email.id}:`, err);
+          skippedCount++;
         }
       }
 
       res.json({
         success: true,
+        total: unprocessed.length,
         processed: processedCount,
+        skipped: skippedCount,
         eventsExtracted: eventsCount,
-        message: `${processedCount}개 이메일 처리 완료, ${eventsCount}개 일정 추출`
+        message: `처리 완료: ${processedCount}개 성공, ${skippedCount}개 건너뜀, 일정 ${eventsCount}개 추출`,
       });
     } catch (error) {
       console.error("Process unprocessed error:", error);

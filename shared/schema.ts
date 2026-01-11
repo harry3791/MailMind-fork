@@ -9,6 +9,11 @@ export const emails = pgTable("emails", {
   sender: text("sender").notNull().default(""),
   date: text("date").notNull().default(""),
   body: text("body").notNull().default(""),
+
+  hasAttachment: text("has_attachment")
+    .$type<"true" | "false">()
+    .default("false"),
+
   importance: text("importance"),
   label: text("label"),
   classification: text("classification"),

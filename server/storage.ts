@@ -20,14 +20,13 @@ import {
   type CalendarEvent,
   type InsertCalendarEvent,
   appSettings
-} from "@shared/schema";
-import { db } from "./db";
+} from "../shared/schema.ts";
+import { db } from "./db.ts";
 import { eq, or, ilike, desc, sql } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
   
   getEmailsCount(): Promise<number>;
   getLastImport(): Promise<ImportLog | undefined>;
@@ -134,7 +133,7 @@ export class DatabaseStorage implements IStorage {
     const batchSize = 100;
     let inserted = 0;
     
-    await db.transaction(async (tx) => {
+    await db.transaction(async (tx: any) => {
       for (let i = 0; i < emailsToInsert.length; i += batchSize) {
         const batch = emailsToInsert.slice(i, i + batchSize);
         await tx.insert(emails).values(batch);
@@ -164,7 +163,7 @@ export class DatabaseStorage implements IStorage {
       )
       .limit(100);
 
-    const scored: SearchResult[] = results.map(email => {
+    const scored: SearchResult[] = results.map((email: Email) => {
       const textToScore = `${email.subject} ${email.body}`;
       const score = scoreText(textToScore, tokens);
       
@@ -177,7 +176,7 @@ export class DatabaseStorage implements IStorage {
         body: email.body || "",
         attachments: [],
       };
-    }).filter(r => r.score > 0);
+    }).filter((r: SearchResult) => r.score > 0);
 
     scored.sort((a, b) => b.score - a.score);
     
@@ -239,18 +238,30 @@ export class DatabaseStorage implements IStorage {
 
   async insertEmailsAndGetIds(emailsToInsert: InsertEmail[]): Promise<Email[]> {
     if (emailsToInsert.length === 0) return [];
-    
+
     const batchSize = 100;
     const allInserted: Email[] = [];
-    
-    await db.transaction(async (tx) => {
-      for (let i = 0; i < emailsToInsert.length; i += batchSize) {
-        const batch = emailsToInsert.slice(i, i + batchSize);
-        const inserted = await tx.insert(emails).values(batch).returning();
+
+    // 🔧 hasAttachment 문자열 정규화
+    const normalizedEmails = emailsToInsert.map(email => ({
+      ...email,
+      hasAttachment:
+        email.hasAttachment === "true"
+          ? "true"
+          : "false",
+    }));
+
+    await db.transaction(async (tx: any) => {
+      for (let i = 0; i < normalizedEmails.length; i += batchSize) {
+        const batch = normalizedEmails.slice(i, i + batchSize);
+        const inserted = await tx
+          .insert(emails)
+          .values(batch)
+          .returning();
         allInserted.push(...inserted);
       }
     });
-    
+
     return allInserted;
   }
 
@@ -293,7 +304,7 @@ export class DatabaseStorage implements IStorage {
   }
 }
 
-import { LocalSQLiteStorage } from "./local-storage";
+import { LocalSQLiteStorage } from "./local-storage.ts";
 
 const DATA_DIR = process.env.DATA_DIR || "";
 const STORAGE_MODE = process.env.STORAGE_MODE || "postgresql";
